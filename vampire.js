@@ -41,17 +41,31 @@ class Vampire {
 
   // Returns the vampire object with that name, or null if no vampire exists with that name
   vampireWithName(name) {
-    
+
+    if (this.name === name) {
+      return this;
+    }
+
+    let result = null;
+
+    for (let offspring of this.offspring) {
+      if (offspring.name === name) {
+        console.log(offspring.name);
+        result = offspring;
+      } else {
+        result = offspring.vampireWithName(name);
+      }
+    } if (result) {return result};
   }
 
   // Returns the total number of vampires that exist
   get totalDescendents() {
-    
+    let descendentCount = 0;
   }
 
   // Returns an array of all the vampires that were converted after 1980
   get allMillennialVampires() {
-    
+
   }
 
   /** Stretch **/
@@ -98,21 +112,7 @@ angela.addOffspring(jean)
 arvinder.addOffspring(sansa);
 joe.addOffspring(henry);
 
-console.log(sansa.closestCommonAncestor(henry));
+
+console.log(ada.vampireWithName("Henry"));
 
 module.exports = Vampire;
-
-
-
-
-
-  // }
-//   closestCommonAncestor(vampire) { // trying this recursively instead? 
-//     let parentArray1 = []; let parentArray2 = [];
-//     let currentParent1 = this.creator; let currentParent2 = vampire.creator;
-//     if (currentParent1 === currentParent2) {
-//       return currentParent1;
-//     }
-//     if 
-//   }
-// }
