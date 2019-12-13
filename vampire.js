@@ -6,26 +6,35 @@ class Vampire {
     this.creator = null;
   }
 
-  /** Simple tree methods **/
-
   // Adds the vampire as an offspring of this vampire
   addOffspring(vampire) {
-
+    this.offspring.push(vampire);
+    vampire.creator = this;
   }
-
   // Returns the total number of vampires created by that vampire
   get numberOfOffspring() {
-
+    return this.offspring.length;
   }
 
   // Returns the number of vampires away from the original vampire this vampire is
   get numberOfVampiresFromOriginal() {
-
+    let numberOfPeople = 0;
+    let currentVampire = this;
+    while (currentVampire.creator) {
+      currentVampire = currentVampire.creator;
+      numberOfPeople++;
+    } return numberOfPeople;
   }
 
   // Returns true if this vampire is more senior than the other vampire. (Who is closer to the original vampire)
   isMoreSeniorThan(vampire) {
-
+    let vampSelf = this.numberOfVampiresFromOriginal;
+    let vampOther = vampire.numberOfVampiresFromOriginal;
+    if (vampSelf < vampOther) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /** Stretch **/
@@ -35,10 +44,58 @@ class Vampire {
   // For example:
   // * when comparing Ansel and Sarah, Ansel is the closest common anscestor.
   // * when comparing Ansel and Andrew, Ansel is the closest common anscestor.
-  closestCommonAncestor(vampire) {
 
+  closestCommonAncestor(vampire) { // trying this iteratively
+    if (!this.creator) { return this };
+    if (!vampire.creator) { return vampire };
+    let parentArray1 = []; let parentArray2 = [];
+    let parent1 = this; let parent2 = vampire;
+    if (parent1 === parent2) { return parent1; }
+
+    for (let i = 0; i <= vampire.numberOfVampiresFromOriginal; i++) {
+      parentArray1.push(parent1); parentArray2.push(parent2);
+      if (parentArray1.includes(parent2)) { return parent2; }
+      if (parentArray2.includes(parent1)) { return parent1; }
+      if (parent1.creator) { parent1 = parent1.creator; }
+      if (parent2.creator) { parent2 = parent2.creator; }
+    }
   }
 }
 
+const ada = new Vampire("Ada", 1900);
+const craig = new Vampire("Craig", 1950);
+const arvinder = new Vampire("Arvinder", 1990);
+const angela = new Vampire("Angela", 1980);
+const phil = new Vampire("Phil", 2000);
+const joe = new Vampire("Joe", 2002);
+const jean = new Vampire("Jean", 2002);
+const sansa = new Vampire("Sansa", 2002);
+const henry = new Vampire("Henry", 2002);
+
+ada.addOffspring(craig);
+ada.addOffspring(arvinder);
+ada.addOffspring(angela);
+arvinder.addOffspring(phil);
+phil.addOffspring(joe);
+angela.addOffspring(jean)
+arvinder.addOffspring(sansa);
+joe.addOffspring(henry);
+
+console.log(sansa.closestCommonAncestor(henry));
+
 module.exports = Vampire;
 
+
+
+
+
+  // }
+//   closestCommonAncestor(vampire) { // trying this recursively instead? 
+//     let parentArray1 = []; let parentArray2 = [];
+//     let currentParent1 = this.creator; let currentParent2 = vampire.creator;
+//     if (currentParent1 === currentParent2) {
+//       return currentParent1;
+//     }
+//     if 
+//   }
+// }
